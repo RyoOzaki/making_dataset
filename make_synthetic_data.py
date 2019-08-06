@@ -20,11 +20,10 @@ def load_sentences(file):
     return [[wrd.strip() for wrd in snt.split(" ") if wrd] for snt in body if snt]
 
 wdict_ext = "wdict"
-source_ext = "txt"
 
 parser = ArgumentParser()
-parser.add_argument("-s", "--source_dir", type=Path, default="./source", help="root dir of source data, i.e., '*.wdict' and '*.txt'")
-parser.add_argument("-n", "--name", type=str, required=True, help="target datasets name")
+parser.add_argument("source_file", type=Path, help="source file of dataset")
+
 parser.add_argument("-o", "--output_dir", type=Path, default="./synthetic_data", help="dir of saving summary files and figures")
 
 parser.add_argument("--delimiter", type=str, default=":=", help="delimiter of word dictionary")
@@ -32,15 +31,17 @@ parser.add_argument("--repeat", type=int, default=1, help="repeat count of sente
 
 args = parser.parse_args()
 
-source_dir = args.source_dir
+source_file = args.source_file
+source_dir = source_file.parent
 output_dir = args.output_dir
-target_name = args.name
+target_name = source_file.stem
 
 delimiter = args.delimiter
 repeat = args.repeat
 
+output_dir.mkdir(exist_ok=True)
+
 wdict_file = source_dir / f"{target_name}.{wdict_ext}"
-source_file = source_dir / f"{target_name}.{source_ext}"
 
 word_dict = load_word_dict(wdict_file, delimiter)
 sentences = load_sentences(source_file) * repeat

@@ -14,20 +14,23 @@ def load_sentences(file):
     return [[wrd.strip() for wrd in snt.split(" ") if wrd] for snt in body if snt]
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-s", "--source_dir", type=Path, default="./source")
-parser.add_argument("-n", "--name", required=True)
-parser.add_argument("-o", "--output_dir", type=Path, default="./source")
+parser.add_argument("source_file", type=Path, help="source file of dataset")
+
+parser.add_argument("-o", "--output_dir", type=Path, default="./source", help="dir of saving summary files and figures")
+
 parser.add_argument("--delimiter", default=":=")
 parser.add_argument("--repeat", type=int, default=1)
 args = parser.parse_args()
 
-source_dir = args.source_dir
-name = args.name
+source_file = args.source_file
+source_dir = source_file.parent
+name = source_file.stem
 output_dir = args.output_dir
 repeat = args.repeat
 delimiter = args.delimiter
 
-source_file = source_dir / f"{name}.txt"
+output_dir.mkdir(exist_ok=True)
+
 word_dict_file = source_dir / f"{name}.wdict"
 
 sentences = load_sentences(source_file)
