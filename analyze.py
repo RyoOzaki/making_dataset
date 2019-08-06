@@ -62,7 +62,7 @@ output_target_dir = output_dir / f"{target_name}"
 output_target_dir.mkdir(exist_ok=True)
 
 #%% Saving summary file
-output_summary = output_target_dir / "summary.txt"
+output_summary = output_target_dir / "Summary.txt"
 with output_summary.open("w") as f:
     print(f"Sentence_N: {len(sentences)}", file=f)
     print(f"Unique word N: {len(wrd_list)}", file=f)
@@ -78,6 +78,12 @@ with output_summary.open("w") as f:
     print(f"Min number of words in a sentence: {min([len(snt) for snt in sentences])}", file=f)
     print(f"Min number of phonemes in a sentence: {min([sum([len(word_dict[wrd]) for wrd in snt]) for snt in sentences])}", file=f)
 
+output_file = output_target_dir / "Word_list.txt"
+output_file.write_text("\n".join(wrd_list))
+
+output_file = output_target_dir / "Phoneme_list.txt"
+output_file.write_text("\n".join(phn_list))
+
 #%% Initialize figure object of matplotlib
 plt.figure(figsize=(10, 8))
 
@@ -89,6 +95,9 @@ for snt in sentences:
         count[wrd_list.index(wrd)] += 1
 args = np.argsort(count)[::-1]
 x = range(word_N)
+
+output_file = output_target_dir / "Word_ranking.npz"
+np.savez(output_file, word_list=np.array(wrd_list), count=count)
 
 plt.clf()
 plt.bar(x, count[args])
@@ -105,6 +114,9 @@ for snt in sentences:
             count[phn_list.index(phn)] += 1
 args = np.argsort(count)[::-1]
 x = range(phoneme_N)
+
+output_file = output_target_dir / "Phoneme_ranking.npz"
+np.savez(output_file, phoneme_list=np.array(phn_list), count=count)
 
 plt.clf()
 plt.bar(x, count[args])
@@ -123,6 +135,10 @@ for wrd_idx, wrd in enumerate(wrd_list):
 
 x = np.arange(phoneme_N) + 0.5
 y = np.arange(word_N) + 0.5
+
+
+output_file = output_target_dir / "Word_dictionary.npz"
+np.savez(output_file, word_list=np.array(wrd_list), phoneme_list=np.array(phn_list), count=count)
 
 plt.clf()
 plt.pcolor(count[::-1], cmap=cmap)
@@ -151,6 +167,9 @@ for snt in sentences:
         count[from_idx, to_idx] += 1
 x = np.arange(word_N) + 0.5
 
+output_file = output_target_dir / "Word_bigram.npz"
+np.savez(output_file, word_list=np.array(wrd_list), count=count)
+
 plt.clf()
 plt.pcolor(count[::-1], cmap=cmap)
 plt.yticks(x, wrd_list[::-1])
@@ -176,6 +195,9 @@ for snt in sentences:
         to_idx = phn_list.index(to_wrd)
         count[from_idx, to_idx] += 1
 x = np.arange(phoneme_N) + 0.5
+
+output_file = output_target_dir / "Phoneme_bigram.npz"
+np.savez(output_file, phoneme_list=np.array(phn_list), count=count)
 
 plt.clf()
 plt.pcolor(count[::-1], cmap=cmap)
