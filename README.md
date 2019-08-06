@@ -43,7 +43,7 @@ python make_empty_wdict.py source/sample.txt --replace_file
 ### オプション引数一覧
 |オプション           |デフォルト値         |備考|
 |-------------------|-------------------|---|
-| -o (--output)     | ./analyze_summary | 出力先ディレクトリ|
+| -o (--output)     | ./analyze_summary | 出力先ディレクトリ |
 | --figure_ext      | png               | 出力する図の拡張子 |
 | --delimiter       | :=                | 単語の定義演算子 |
 | --repeat          | 1                 | 書き下し文の繰り返し回数 |
@@ -54,9 +54,9 @@ python make_empty_wdict.py source/sample.txt --replace_file
 
 ### 実行方法サンプル
 ```
-python analyze source/sample.txt
-python analyze source/sample.txt -o analyze_summary
-python analyze source/sample.txt --delimiter := --repeat 1
+python analyze.py source/sample.txt
+python analyze.py source/sample.txt -o analyze_summary
+python analyze.py source/sample.txt --delimiter := --repeat 1
 ```
 
 ## make_synthetic_data.py
