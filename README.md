@@ -2,7 +2,6 @@
 
 Author: 尾崎 僚 (Ryo Ozaki)
 
----
 ## 前提
 - 書き下し文ファイル
   - 拡張子はtxt
@@ -13,8 +12,6 @@ Author: 尾崎 僚 (Ryo Ozaki)
   - 1行1単語で記述
   - "単語 := 音素列"のフォーマットに従って記述
     - (ただし定義記号":="は引数--delimiterにより変更可)
-
----
 
 ## make_empty_wdict.py
 単語辞書ファイルを空で作成
@@ -30,8 +27,6 @@ Author: 尾崎 僚 (Ryo Ozaki)
 python make_empty_wdict.py -n sample
 python make_empty_wdict.py -s source -n sample
 ```
-
----
 
 ## analyze.py
 書き下し文・単語辞書から単語のバイクラムや単語頻度・音素頻度等を図・ファイルに保存
@@ -57,8 +52,6 @@ python analyze -s source -o analyze_summary -n sample
 python analyze -n sample --delimiter := --repeat 1
 ```
 
----
-
 ## make_synthetic_data.py
 書き下し文・単語辞書から2次元ガウス分布のデータセットを作成
 
@@ -76,4 +69,23 @@ python analyze -n sample --delimiter := --repeat 1
 python make_synthetic_data.py -n sample
 python make_synthetic_data.py -s source -o synthetic_data -n sample
 python make_synthetic_data.py -n sample --delimiter := --repeat 1
+```
+
+## make_phn_and_wrd.py
+latticelm用に書き下し文・単語辞書からphnファイルとwrdファイルを作成
+
+### 引数一覧
+|引数                |デフォルト値         |備考|
+|-------------------|-------------------|---|
+| -s (--source_dir) | ./source          | 書き下し文のあるディレクトリ |
+| -n (--name)       | なし（必須）        | 書き下し文のファイル名 (拡張子除く) |
+| -o (--output)     | ./source          | 出力先ディレクトリ|
+|--delimiter        | :=                | 単語の定義演算子 |
+|--repeat           | 1                 | 書き下し文の繰り返し回数 |
+
+### 実行方法サンプル
+```
+python make_phn_and_wrd.py -n sample
+python make_phn_and_wrd.py -s source -o source -n sample
+python make_phn_and_wrd.py -n sample --delimiter := --repeat 1
 ```
