@@ -2,103 +2,222 @@
 
 Author: 尾崎 僚 (Ryo Ozaki)
 
-## 前提
+Required: [Julius](https://github.com/julius-speech/julius) <br>
+Required: [Julius Japanese Dictation-kit](https://github.com/julius-speech/dictation-kit)
+
+----
+## Julius installation
+1. Install julius.
+  1. `git clone https://github.com/julius-speech/julius`
+  2. `cd julius`
+  3. `./configure`
+  4. `make`
+  5. `make install`
+2. Clone Dictation-kit and copy some files
+  1. `git clone https://github.com/julius-speech/dictation-kit`
+  2. `cp -r dictation-kit/model ./`
+  3. `cp dictation-kit/julius.dnnconf ./`
+
+----
 - 書き下し文ファイル
   - 拡張子はtxt
   - 1文1行で記述
+  - 基本構造は"[sentence_id]: [word_1] [word_2] ..."だが，"[sentence_id]"は無くても問題ない
   - 単語間は半角スペースで区切る
 - 単語辞書ファイル
   - 拡張子はwdict
   - 1行1単語で記述
   - "単語 := 音素列"のフォーマットに従って記述
-    - (ただし定義記号":="は引数--delimiterにより変更可)
 
+----
+## recording.py
+書き下し文をもとに音声の録音を行う．
+
+### Usage sample
+```
+python recording.py \
+  --chunk <CHUNK> \
+  --samplerate <SAMPLERATE> \
+  --threshold <THRESHOLD> \
+  --sil_margin <SIL_MARGIN> \
+  --sentence <SENTENCE> \
+  --output_dir <OUTPUT_DIR> \
+  --speaker <SPEAKER> \
+  --repeat <REPEAT> \
+  --randamize
+```
+
+### Arguments
+#### Required arguments
+| Argument | Help |
+|----------|------|
+| --sentence | 書き下し文ファイル |
+| --output_dir | 出力先ディレクトリ |
+
+#### Optional arguments
+| Argument | Default | Help |
+|----------|---------|------|
+| --chunk | 1024 | 音声録音時に一度に読み込むチャンク数 |
+| --samplerate | 48000 | サンプリングレート |
+| --threshold | 0.01 | 無音区間判定に用いる閾値 |
+| --sil_margin | 1.0 | 音声ファイルの前後に挿入する無音区間の最小時間 (秒) |
+| --speaker | | 指定時は"--output_dir / --speaker"の位置に音声ファイルが保存される |
+| --repeat | 1 | 繰り返し回数 |
+| --randamize | | 文章をランダムに並び替えて録音を行う |
+
+----
 ## make_empty_wdict.py
-単語辞書ファイルを空で作成
+空の単語辞書ファイルを作成する．
 
-### 位置引数一覧
-|位置                |備考|
-|-------------------|---|
-| 1                 | 書き下し文のファイル |
-
-### オプション引数一覧
-|オプション           |デフォルト値         |備考|
-|-------------------|-------------------|---|
-| --replace_file    | False             | オプション指定でファイルを上書き |
-### 実行方法サンプル
+### Usage sample
 ```
-python make_empty_wdict.py source/sample.txt
-python make_empty_wdict.py source/sample.txt --replace_file
+python make_empty_wdict.py \
+  --sentence <SENTENCE> \
+  --replace_file
 ```
 
-## analyze.py
-書き下し文・単語辞書から単語のバイクラムや単語頻度・音素頻度等を図・ファイルに保存
+### Arguments
+#### Required arguments
+| Argument | Help |
+|----------|------|
+| --sentence | センテンスファイル |
 
-### 位置引数一覧
-|位置                |備考|
-|-------------------|---|
-| 1                 | 書き下し文のファイル |
+#### Optional arguments
+| Argument | Default | Help |
+|----------|---------|------|
+| --replace_file | | 既にwdictファイルが存在した時，置き換える |
 
+----
+## reference_julius_wdict.py
+Juliusの単語辞書を参照し，.wdictファイルを一部埋める．
 
-### オプション引数一覧
-|オプション           |デフォルト値         |備考|
-|-------------------|-------------------|---|
-| -o (--output)     | ./analyze_summary | 出力先ディレクトリ |
-| --figure_ext      | png               | 出力する図の拡張子 |
-| --delimiter       | :=                | 単語の定義演算子 |
-| --repeat          | 1                 | 書き下し文の繰り返し回数 |
-| --pfsize          | 10                | 音素バイグラム・単語辞書のフォントサイズ |
-| --wfsize          | 10                | 単語バイグラムのフォントサイズ |
-| --fcolor          | black             | バイグラム・単語辞書のフォントカラー |
-| --cmap            | rainbow           | バイグラム・単語辞書のカラーマップ |
-
-### 実行方法サンプル
+### Usage sample
 ```
-python analyze.py source/sample.txt
-python analyze.py source/sample.txt -o analyze_summary
-python analyze.py source/sample.txt --delimiter := --repeat 1
+python reference_julius_wdict.py \
+  --julius_htkdic <JULIUS_HTKDIC> \
+  --target_wdict <TARGET_WDICT>
 ```
 
-## make_synthetic_data.py
-書き下し文・単語辞書から2次元ガウス分布のデータセットを作成
+### Arguments
+#### Required arguments
+| Argument | Help |
+|----------|------|
+| --julius_htkdic | .htkdicファイル |
+| --target_wdict | .wdict ファイル |
 
-### 位置引数一覧
-|位置                |備考|
-|-------------------|---|
-| 1                 | 書き下し文のファイル |
+#### Optional arguments
+None
 
-### オプション引数一覧
-|オプション           |デフォルト値         |備考|
-|-------------------|-------------------|---|
-| -o (--output)     | ./synthetic_data  | 出力先ディレクトリ|
-| --delimiter       | :=                | 単語の定義演算子 |
-| --repeat          | 1                 | 書き下し文の繰り返し回数 |
+----
+## make_julius_lang_model.py
+書き下し文および単語辞書を参照し，Juliusを用いたラベリングに必要なファイルを作成する．
 
-### 実行方法サンプル
+### Usage sample
 ```
-python make_synthetic_data.py source/sample.txt
-python make_synthetic_data.py source/sample.txt -o synthetic_data
-python make_synthetic_data.py source/sample.txt --delimiter := --repeat 1
+python make_julius_lang_model.py \
+  --source <SOURCE> \
+  --output_dir <OUTPUT_DIR> \
+  --repeat <REPEAT> \
+  --BOS <BOS> \
+  --EOS <EOS> \
+  --AM <ACOUSTIC_MODEL>
 ```
 
-## make_phn_and_wrd.py
-latticelm用に書き下し文・単語辞書からphnファイルとwrdファイルを作成
+### Arguments
+#### Required arguments
+| Argument | Help |
+|----------|------|
+| --source | センテンスファイル |
 
-### 位置引数一覧
-|位置                |備考|
-|-------------------|---|
-| 1                 | 書き下し文のファイル |
+#### Optional arguments
+| Argument | Default | Help |
+|----------|---------|------|
+| --output_dir | --source | パラメータファイルの出力先ディレクトリ |
+| --repeat | 1 | 繰り返し回数 |
+| --AM | DNN | 音響モデル (DNN / GMM) |
+| --BOS | &lt;s&gt; | 文章開始フラグ単語 |
+| --EOS | &lt;/s&gt; | 文章終了フラグ単語 |
 
-### オプション引数一覧
-|オプション           |デフォルト値         |備考|
-|-------------------|-------------------|---|
-| -o (--output)     | ./source          | 出力先ディレクトリ|
-| --delimiter       | :=                | 単語の定義演算子 |
-| --repeat          | 1                 | 書き下し文の繰り返し回数 |
+----
+## make_julius_recognition_script.py
+Juliusを用いた音声認識を実行するスクリプトを作成する．
 
-### 実行方法サンプル
+### Usage sample
 ```
-python make_phn_and_wrd.py source/sample.txt
-python make_phn_and_wrd.py source/sample.txt -o synthetic_data
-python make_phn_and_wrd.py source/sample.txt --delimiter := --repeat 1
+python make_julius_recognition_script.py \
+  --source_dir <SOURCE_DIR> \
+  --lang_model_dir <LANG_MODEL_DIR> \
+  --samplerate <SAMPLERATE> \
+  --julius_exe <JULIUS_EXE> \
+  --output_file <OUTPUT_FILE> \
+  --AM <ACOUSTIC_MODEL>
 ```
+
+### Arguments
+#### Required arguments
+| Argument | Help |
+|----------|------|
+| --source_dir | 認識対象ファイルが配置されているディレクトリ |
+
+#### Optional arguments
+| Argument | Default | Help |
+|----------|---------|------|
+| --output_file | recognition.sh | Julius 音声認識を実行するスクリプト |
+| --lang_model_dir | --source_dir | make_julius_lang_model.py で作成されたパラメータの保存ディレクトリ |
+| --samplerate | 48000 | 音声ファイルのサンプリングレート (16000 / 48000) |
+| --julius_exe | julius | juliusの実行ファイル (インストール先が通常インストールと異なる場合などで使用) |
+| --AM | DNN | 音響モデル (DNN / GMM_mono / GMM_tri) |
+
+----
+## convert_julius_label.py
+Juliusの認識結果からセグメントファイルを作成する．
+
+### Usage sample
+```
+python convert_julius_label.py \
+  --source_dir <SOURCE_DIR> \
+  --samplerate <SAMPLERATE> \
+  --label_format <LABEL_FORMAT>
+```
+
+### Arguments
+#### Required arguments
+| Argument | Help |
+|----------|------|
+| --source_dir | 認識結果ファイルが配置されているディレクトリ |
+
+#### Optional arguments
+| Argument | Default | Help |
+|----------|---------|------|
+| --samplerate | 48000 | 音声ファイルのサンプリングレート (16000 / 48000) |
+| --label_format | time | 出力するラベルのフォーマット (time / wav_frame / mfcc_frame) |
+
+----
+## cut_sil_using_label.py
+文章前後の無音区間をJuliusを用いた認識ラベルをもとに除去する．
+
+### Usage sample
+```
+python cut_sil_using_label.py \
+  --source_dir <SOURCE_DIR> \
+  --label_format <LABEL_FORMAT> \
+  --output_dir <OUTPUT_DIR>
+```
+```
+python cut_sil_using_label.py \
+  --source_dir <SOURCE_DIR> \
+  --label_format <LABEL_FORMAT> \
+  --replace
+```
+
+### Arguments
+#### Required arguments
+| Argument | Help |
+|----------|------|
+| --source_dir | 認識結果ファイルが配置されているディレクトリ |
+| --output_dir <br> --replace | 出力先ディレクトリ <br> 元ファイルを置き換える |
+
+#### Optional arguments
+| Argument | Default | Help |
+|----------|---------|------|
+| --label_format | time | 入力・出力するラベルのフォーマット (time / wav_frame / mfcc_frame) |

@@ -1,0 +1,117 @@
+# obj01
+obj01_snt01: 大きい ぬいぐるみ
+obj01_snt02: やわらかい よ
+obj01_snt03: おもちゃ です
+
+# obj02
+obj02_snt01: これは ぬいぐるみ だよ
+obj02_snt02: やわらかい ね
+obj02_snt03: これは おもちゃ
+obj02_snt04: 小さい よ
+
+# obj03
+obj03_snt01: これは ぬいぐるみ です
+obj03_snt02: やわらかい よ
+obj03_snt03: おもちゃ だよ
+
+# obj04
+obj04_snt01: お菓子 だよ
+obj04_snt02: 食べ物 です
+obj04_snt03: おいしい よ
+obj04_snt04: これは 大きい
+
+# obj05
+obj05_snt01: これは お菓子
+obj05_snt02: 食べ物 だよ
+obj05_snt03: 小さい カップ だよ
+
+# obj06
+obj06_snt01: これは お菓子 です
+obj06_snt02: これは 食べ物
+obj06_snt03: おいしい です
+
+# obj07
+obj07_snt01: お菓子 だよ
+obj07_snt02: カップ だよ
+obj07_snt03: おいしい ね
+
+# obj08
+obj08_snt01: ジュース の ペットボトル だよ
+obj08_snt02: これは 飲み物
+obj08_snt03: やわらかい です
+
+# obj09
+obj09_snt01: ジュース の ペットボトル です
+obj09_snt02: やわらかい よ
+obj09_snt03: おいしい です
+
+# obj10
+obj10_snt01: 大きい ペットボトル
+obj10_snt02: おいしい よ
+obj10_snt03: 入れ物 です
+obj10_snt04: 飲み物 だよ
+obj10_snt05: 大きい よ
+
+# obj11
+obj11_snt01: 飲み物 の ペットボトル
+obj11_snt02: 小さい よ
+
+# obj12
+obj12_snt01: 小さい ペットボトル だよ
+obj12_snt02: おいしい よ
+
+# obj13
+obj13_snt01: おもちゃ の ボール です
+obj13_snt02: やわらかい よ
+obj13_snt03: おもちゃ だよ
+
+# obj14
+obj14_snt01: これは ボール
+obj14_snt02: おもちゃ です
+obj14_snt03: 小さい よ
+
+# obj15
+obj15_snt01: 小さい ボール だよ
+obj15_snt02: 小さい ね
+obj15_snt03: これは おもちゃ
+
+# obj16
+obj16_snt01: スプレー の 缶 です
+obj16_snt02: かたい ね
+
+# obj17
+obj17_snt01: これは スプレー 缶
+obj17_snt02: 缶 です
+
+# obj18
+obj18_snt01: スプレー だね
+obj18_snt02: 大きい 缶
+
+# obj19
+obj19_snt01: 大きい 缶 です
+obj19_snt02: おいしい ね
+obj19_snt03: かたい よ
+
+# obj20
+obj20_snt01: 食べ物 の 缶 だよ
+obj20_snt02: 食べ物 だね
+obj20_snt03: 小さい ね
+
+# obj21
+obj21_snt01: これは 缶 だよ
+obj21_snt02: 小さい 食べ物 の 缶
+obj21_snt03: おいしい よ
+obj21_snt04: かたい よ
+
+# obj22
+obj22_snt01: カップ の ラーメン
+obj22_snt02: 食べ物 だよ
+obj22_snt03: おいしい です
+
+# obj23
+obj23_snt01:これは ラーメン だよ
+obj23_snt02:これは 食べ物
+
+# obj24
+obj24_snt01: 大きい カップ です
+obj24_snt02: ラーメン です
