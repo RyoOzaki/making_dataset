@@ -8,15 +8,19 @@ Required: [Julius Japanese Dictation-kit](https://github.com/julius-speech/dicta
 ----
 ## Julius installation
 1. Install julius.
-  1. `git clone https://github.com/julius-speech/julius`
-  2. `cd julius`
-  3. `./configure`
-  4. `make`
-  5. `make install`
+```
+git clone https://github.com/julius-speech/julius
+cd julius
+./configure
+make
+make install
+```
 2. Clone Dictation-kit and copy some files
-  1. `git clone https://github.com/julius-speech/dictation-kit`
-  2. `cp -r dictation-kit/model ./`
-  3. `cp dictation-kit/julius.dnnconf ./`
+```
+git clone https://github.com/julius-speech/dictation-kit
+cp -r dictation-kit/model ./
+cp dictation-kit/julius.dnnconf ./
+```
 
 ----
 - 書き下し文ファイル
@@ -35,7 +39,7 @@ Required: [Julius Japanese Dictation-kit](https://github.com/julius-speech/dicta
 
 ### Usage sample
 ```
-python recording.py \
+python src/recording.py \
   --chunk <CHUNK> \
   --samplerate <SAMPLERATE> \
   --threshold <THRESHOLD> \
@@ -71,7 +75,7 @@ python recording.py \
 
 ### Usage sample
 ```
-python make_empty_wdict.py \
+python src/make_empty_wdict.py \
   --sentence <SENTENCE> \
   --replace_file
 ```
@@ -93,7 +97,7 @@ Juliusの単語辞書を参照し，.wdictファイルを一部埋める．
 
 ### Usage sample
 ```
-python reference_julius_wdict.py \
+python src/reference_julius_wdict.py \
   --julius_htkdic <JULIUS_HTKDIC> \
   --target_wdict <TARGET_WDICT>
 ```
@@ -114,7 +118,7 @@ None
 
 ### Usage sample
 ```
-python make_julius_lang_model.py \
+python src/make_julius_lang_model.py \
   --source <SOURCE> \
   --output_dir <OUTPUT_DIR> \
   --repeat <REPEAT> \
@@ -144,7 +148,7 @@ Juliusを用いた音声認識を実行するスクリプトを作成する．
 
 ### Usage sample
 ```
-python make_julius_recognition_script.py \
+python src/make_julius_recognition_script.py \
   --source_dir <SOURCE_DIR> \
   --lang_model_dir <LANG_MODEL_DIR> \
   --samplerate <SAMPLERATE> \
@@ -174,7 +178,7 @@ Juliusの認識結果からセグメントファイルを作成する．
 
 ### Usage sample
 ```
-python convert_julius_label.py \
+python src/convert_julius_label.py \
   --source_dir <SOURCE_DIR> \
   --samplerate <SAMPLERATE> \
   --label_format <LABEL_FORMAT>
@@ -198,13 +202,13 @@ python convert_julius_label.py \
 
 ### Usage sample
 ```
-python cut_sil_using_label.py \
+python src/cut_sil_using_label.py \
   --source_dir <SOURCE_DIR> \
   --label_format <LABEL_FORMAT> \
   --output_dir <OUTPUT_DIR>
 ```
 ```
-python cut_sil_using_label.py \
+python src/cut_sil_using_label.py \
   --source_dir <SOURCE_DIR> \
   --label_format <LABEL_FORMAT> \
   --replace
