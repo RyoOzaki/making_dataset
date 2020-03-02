@@ -26,12 +26,12 @@ cp dictation-kit/julius.dnnconf ./
 - 書き下し文ファイル
   - 拡張子はtxt
   - 1文1行で記述
-  - 基本構造は"[sentence_id]: [word_1] [word_2] ..."だが，"[sentence_id]"は無くても問題ない
+  - "[sentence_id]: [word_1] [word_2] ..."と記述
   - 単語間は半角スペースで区切る
 - 単語辞書ファイル
   - 拡張子はwdict
   - 1行1単語で記述
-  - "単語 := 音素列"のフォーマットに従って記述
+  - "単語 := 音素列"と記述
 
 ----
 ## recording.py
