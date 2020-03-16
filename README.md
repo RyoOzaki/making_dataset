@@ -22,6 +22,18 @@ cp -r dictation-kit/model ./
 cp dictation-kit/julius.dnnconf ./
 ```
 
+3. Run recording
+```
+  bash run_recording.sh
+```
+
+4. Run recognition
+```
+  bash run_recognition.sh
+```
+
+5. For more detail, please see run_recording.sh and run_recognition.sh
+
 ----
 - 書き下し文ファイル
   - 拡張子はtxt

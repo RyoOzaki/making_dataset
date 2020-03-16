@@ -113,3 +113,4 @@ venv.bak/
 *.out
 model/
 julius.dnnconf
+recognition.sh

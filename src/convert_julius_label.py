@@ -55,7 +55,7 @@ def parse(body):
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument("--source_dir", type=Path, default="./raw_wav", help="source dir")
+parser.add_argument("--source_dir", type=Path, default="./raw_source", help="source dir")
 parser.add_argument("--samplerate", type=int, default=48000, choices=[16000, 48000])
 parser.add_argument("--label_format", default="time", choices=["time", "wave_frame", "mfcc_frame"])
 
@@ -64,6 +64,9 @@ args = parser.parse_args()
 for jout_file in args.source_dir.glob("**/*.out"):
     body = jout_file.read_text().split("\n")
     snt, phn_lab, wrd_lab = parse(body)
+    if len(snt) == 0:
+        print(f"<< INVALID FORMAT!!!! >>")
+        print(f"<< {jout_file} >>")
 
     if args.label_format == "time":
         phn_lab = convert_label_to_time(phn_lab)

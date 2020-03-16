@@ -28,6 +28,7 @@ parser.add_argument("--output_dir", type=Path, required=True)
 parser.add_argument("--speaker")
 parser.add_argument("--randamize", action="store_true")
 parser.add_argument("--repeat", type=int, default=1)
+parser.add_argument("--without_check", action="store_true")
 
 args = parser.parse_args()
 
@@ -52,23 +53,37 @@ sil_margin_cnt = int(RATE / chunk * int(sil_margin_sec))
 
 # 音の取込開始
 p = pyaudio.PyAudio()
-stream = p.open(
+in_stream = p.open(
     format = FORMAT,
     channels = CHANNELS,
     rate = RATE,
     input = True,
     frames_per_buffer = chunk
 )
+in_stream.stop_stream()
+
+out_stream = p.open(
+    format = FORMAT,
+    channels = CHANNELS,
+    rate = RATE,
+    output = True,
+    frames_per_buffer = chunk
+)
+out_stream.stop_stream()
 
 S = len(stems_sentences)
 s = 0
 while s < S:
-    stream.start_stream()
     stm, snt = stems_sentences[s]
+    in_stream.start_stream()
+    heads = []
+    for _ in range(sil_margin_cnt):
+        heads.append(in_stream.read(chunk))
     print(f"Please speech <<< {snt} >>>")
     while True:
         # 音データの取得
-        data = stream.read(chunk)
+        data = in_stream.read(chunk)
+        heads.append(data)
         # ndarrayに変換
         x = np.frombuffer(data, dtype="int16") / 32768.0
 
@@ -77,30 +92,39 @@ while s < S:
             break
 
     sil_cnt = 0
-    all = [data, ]
+    body = []
     print("Recording start!")
     while sil_cnt < sil_margin_cnt:
         # 音データの取得
-        data = stream.read(chunk)
-        all.append(data)
+        data = in_stream.read(chunk)
+        body.append(data)
         # ndarrayに変換
         x = np.frombuffer(data, dtype="int16") / 32768.0
         if x.max() <= threshold:
             sil_cnt += 1
         else:
             sil_cnt = 0
-    stream.stop_stream()
+    tail = in_stream.read(chunk)
+    in_stream.stop_stream()
+    all = [*heads[-sil_margin_cnt:], *body, tail]
     print("Preprocessing...")
     all_data = b''.join(all)
 
     xall = np.frombuffer(all_data, dtype="int16")
 
-    xall = np.concatenate((np.zeros((sil_margin_cnt*chunk, ), dtype="int16"), xall), axis=0)
+    # xall = np.concatenate((np.zeros((sil_margin_cnt*chunk, ), dtype="int16"), xall), axis=0)
 
-    flag = None
-    while flag not in ["y", "n"]:
-        flag = input("save? (y/n) >> ")
-
+    if args.without_check:
+        flag = "y"
+    else:
+        flag = "p"
+        while flag not in ["y", "n"]:
+            if flag == "p":
+                print(f"Playing <<< {snt} >>>")
+                out_stream.start_stream()
+                out_stream.write(all_data)
+                out_stream.stop_stream()
+            flag = input("save? (y/n/p) >> ")
     if flag == "y":
         # 音声ファイルとして出力
         filename = str(output_dir / f"{stm}.wav")
@@ -111,7 +135,7 @@ while s < S:
         out.writeframes(array.array("h", xall).tostring())
         out.close()
         s += 1
-    time.sleep(1)
 
-stream.close()
+in_stream.close()
+out_stream.close()
 p.terminate()
